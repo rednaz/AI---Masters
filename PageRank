@@ -1,0 +1,30 @@
+class PageRank:
+
+    def __init__(self,inputFile):
+        self.data = inputFile
+
+    def pageRank(self):
+        with open(self.data) as file:
+            pageRankData = [[int(digit) for digit in line.strip()] for line in file]
+        d = 0.85
+        numLoops = 10
+
+        ranks = {}
+        nPages = len(pageRankData)
+        for page in pageRankData:
+            ranks[page] = 1.0/nPages
+        for i in range(0, numLoops):
+            newRanks = {}
+            for page in pageRankData:
+                newRank = (1 - d)/nPages
+                for node in pageRankData:
+                    if page in pageRankData[node]:
+                        newRank = newRank + d * (ranks[node]/len(pageRankData[node]))
+                    newRanks[page] = newRank
+                ranks = newRanks
+            return ranks
+
+if __name__ == '__main__':
+    PageRank('data.txt').pageRank()
+
+
